@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/jabardigitalservice/golog/constant"
+
 	gologlogger "github.com/jabardigitalservice/golog/logger"
 )
 
@@ -18,6 +20,7 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h htt
 				host      = r.Host
 				uri       = r.RequestURI
 				userAgent = r.UserAgent()
+				ctx       = r.Context()
 			)
 
 			defer func() {
@@ -40,6 +43,18 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h htt
 					respStatus     = ww.Status()
 					respStatusText = http.StatusText(respStatus)
 				)
+
+				if ctx.Value(constant.CtxUserIDKey) != nil {
+					data.UserID = ctx.Value(constant.CtxUserIDKey).(string)
+				}
+
+				if ctx.Value(constant.CtxSessionIDKey) != nil {
+					data.SessionID = ctx.Value(constant.CtxSessionIDKey).(string)
+				}
+
+				if ctx.Value(constant.CtxClientIDKey) != nil {
+					data.ClientID = ctx.Value(constant.CtxClientIDKey).(string)
+				}
 
 				data.Category = gologlogger.LoggerRouter
 				data.Duration = int64(duration)

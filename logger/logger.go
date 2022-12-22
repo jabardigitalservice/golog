@@ -22,6 +22,9 @@ type LoggerData struct {
 	Method         string                 `json:"method,omitempty"`
 	Duration       int64                  `json:"duration,omitempty"`
 	Version        string                 `json:"version,omitempty"`
+	UserID         string                 `json:"user_id,omitempty"`
+	SessionID      string                 `json:"session_id,omitempty"`
+	ClientID       string                 `json:"client_id,omitempty"`
 	External       *ExternalLoggerData    `json:"external,omitempty"`
 	AdditionalInfo map[string]interface{} `json:"additional_info,omitempty"`
 }
