@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 	"net"
 	"net/http"
@@ -58,7 +59,7 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h htt
 
 				data.Category = gologlogger.LoggerRouter
 				data.Duration = int64(duration)
-				data.Method = fmt.Sprintf("[%s] %s", method, uri)
+				data.Method = fmt.Sprintf("[%s] %s", method, r.URL.Path)
 				data.AdditionalInfo = map[string]interface{}{
 					"http_host":         host,
 					"http_uri":          uri,
@@ -78,7 +79,8 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h htt
 				if respStatus >= 200 && respStatus < 300 {
 					logger.Info(data, respStatusText)
 				} else {
-					logger.Error(data, respStatusText)
+					err := errors.New(respStatusText)
+					logger.Error(data, err)
 				}
 
 			}()

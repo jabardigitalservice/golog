@@ -59,7 +59,7 @@ func (l *Logger) Info(data *LoggerData, message string) {
 	l.logger.WithFields(dataMap).Info(message)
 }
 
-func (l *Logger) Error(data *LoggerData, e string) {
+func (l *Logger) Error(data *LoggerData, e error) {
 	dataMap, err := buildLogData(data)
 	if err != nil {
 		panic(err)
