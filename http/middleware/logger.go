@@ -12,7 +12,7 @@ import (
 	gologlogger "github.com/jabardigitalservice/golog/logger"
 )
 
-func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h http.Handler) http.Handler {
+func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData, includeRespBody bool) func(h http.Handler) http.Handler {
 	return func(h http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
 			var (
@@ -73,7 +73,10 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData) func(h htt
 					"resp_bytes_length": ww.BytesWritten(),
 					"resp_status":       respStatus,
 					"ts":                ts.Format(time.RFC3339),
-					"resp_body":         ww.Body(),
+				}
+
+				if includeRespBody {
+					data.AdditionalInfo["resp_body"] = ww.Body()
 				}
 
 				if respStatus >= 200 && respStatus < 300 {
