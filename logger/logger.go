@@ -25,6 +25,8 @@ type LoggerData struct {
 	UserID         string                 `json:"user_id,omitempty"`
 	SessionID      string                 `json:"session_id,omitempty"`
 	ClientID       string                 `json:"client_id,omitempty"`
+	RequestID      string                 `json:"request_id,omitempty"`
+	RequestName    string                 `json:"request_name,omitempty"`
 	External       *ExternalLoggerData    `json:"external,omitempty"`
 	AdditionalInfo map[string]interface{} `json:"additional_info,omitempty"`
 }
