@@ -106,7 +106,9 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData, includeRes
 
 			}()
 
-			h.ServeHTTP(ww, r)
+			newReq := r.WithContext(ctx)
+
+			h.ServeHTTP(ww, newReq)
 		}
 
 		return http.HandlerFunc(fn)
