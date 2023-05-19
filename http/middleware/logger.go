@@ -45,6 +45,14 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData, includeRes
 					respStatusText = http.StatusText(respStatus)
 				)
 
+				if ctx.Value(constant.CtxRequestIDKey) != nil {
+					data.RequestID = ctx.Value(constant.CtxRequestIDKey).(string)
+				}
+
+				if ctx.Value(constant.CtxRequestNameKey) != nil {
+					data.RequestName = ctx.Value(constant.CtxRequestNameKey).(string)
+				}
+
 				if ctx.Value(constant.CtxUserIDKey) != nil {
 					data.UserID = ctx.Value(constant.CtxUserIDKey).(string)
 				}
