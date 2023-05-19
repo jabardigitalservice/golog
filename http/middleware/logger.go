@@ -1,12 +1,14 @@
 package middleware
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net"
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jabardigitalservice/golog/constant"
 
 	gologlogger "github.com/jabardigitalservice/golog/logger"
@@ -23,6 +25,14 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData, includeRes
 				userAgent = r.UserAgent()
 				ctx       = r.Context()
 			)
+
+			if !checkContext(ctx, constant.CtxRequestIDKey) {
+				ctx = context.WithValue(ctx, constant.CtxRequestIDKey, uuid.New().String())
+			}
+
+			if !checkContext(ctx, constant.CtxRequestNameKey) {
+				ctx = context.WithValue(ctx, constant.CtxRequestNameKey, r.RequestURI)
+			}
 
 			defer func() {
 				var (
@@ -101,4 +111,25 @@ func Logger(logger *gologlogger.Logger, data *gologlogger.LoggerData, includeRes
 
 		return http.HandlerFunc(fn)
 	}
+}
+
+func checkContext(ctx context.Context, key string) bool {
+	var (
+		isExists       = true
+		valueInterface = ctx.Value(key)
+	)
+
+	switch valueInterface {
+	case nil:
+		isExists = false
+	default:
+		switch valueInterface.(type) {
+		case string:
+			if valueInterface.(string) == "" {
+				isExists = false
+			}
+		}
+	}
+
+	return isExists
 }
