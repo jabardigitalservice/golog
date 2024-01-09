@@ -29,6 +29,7 @@ type LoggerData struct {
 	RequestName    string                 `json:"request_name,omitempty"`
 	External       *ExternalLoggerData    `json:"external,omitempty"`
 	AdditionalInfo map[string]interface{} `json:"additional_info,omitempty"`
+	StackTrace     map[string]interface{} `json:"stack_trace"`
 }
 
 type ExternalLoggerData struct {
